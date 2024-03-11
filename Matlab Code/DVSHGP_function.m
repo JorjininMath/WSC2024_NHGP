@@ -1,5 +1,9 @@
-% distributed VSHGP function
-function res_dvshgp = DVSHGP_function(func_name, funcname, train_path, pred_path, noise_func, nn, d, q, b, micro_rep)
+%% distributed VSHGP function
+function res_dvshgp = DVSHGP_function(func_name, funcname, n_induce, n_experts, train_path, pred_path, noise_func, nn, d, q, b, micro_rep)
+% func_name: Matlab fuctions used in experiments 
+% funcname: string of names of functions used in experiments
+% n_induce: number of inducing points for f and g of each expert respectively
+% n_expterts: number of experts
 
 %     rng(150);
 %     x = lhsdesign(q, d);
@@ -21,8 +25,10 @@ function res_dvshgp = DVSHGP_function(func_name, funcname, train_path, pred_path
         n = nn(m);
         % -----Configurations-------------------
         options.Xnorm = 'N'; options.Ynorm = 'N';
-        options.m = [10; 10]; % number of inducing points for f and g of each expert, respectively
-        options.M = 5; % number of experts
+        options.m = n_induce;
+        options.M = n_experts;
+        % options.m = [10; 10]; 
+        % options.M = 5; 
         if n < options.m(1) || n < options.m(2); warning('The inducing size exceeds the expert training size.'); end
         options.numIter = -100; % number of opt iterations, the length of options.numIter is consistent to that of options.flag
                                  % negative: number of function evaluations; positive: number of line searches
